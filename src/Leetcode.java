@@ -425,12 +425,215 @@ public class Leetcode {
         return ans;
     }
 
+    int searchInRotatedArray(int[] a , int k){
+        int left=0,right=a.length-1;
+        while (left<=right){
+            int mid = (left+right)/2;
+            if(a[mid]==k){
+                return mid;
+            }
+            if(a[left]<=a[mid]){
+                if(k>=a[left] && k<=a[mid]){
+                    right=mid-1;
+                }else{
+                    left=mid+1;
+                }
+            }else{
+                if( k>=a[left] || k<=a[mid]){
+                    right=mid-1;
+                }else{
+                    left=mid+1;
+                }
+            }
+        }
+        return -1;
+    }
+
+
+    int findMinInRotatedArray(int[] a){
+        int min = Integer.MAX_VALUE;
+        int left=0,right=a.length-1;
+        while (left<=right){
+            int mid = (left+right)/2;
+            if(a[left]<=a[mid]){
+                min = Math.min(min , a[left]);
+                left=mid+1;
+            }else{
+                min = Math.min(min , a[mid]);
+                right=mid-1;
+            }
+        }
+        return min;
+    }
+
+    int findKRotation(List<Integer> a){
+
+        int left=0,right=a.size()-1;
+        while (left<=right){
+            int mid =  (left+right)/2;
+            if(a.get(left) <= a.get(mid)){
+                left=mid+1;
+            }else{
+                right=mid-1;
+            }
+        }
+        return left;
+    }
+
+    int floorSqrt(int num){      //  1 2 3 4 5
+        int left=1,right=num;
+        int ans=1;
+        while (left<=right){
+            int mid = (left+right)/2;
+            if(mid*mid <= num  && (mid+1)*(mid+1)>num){
+                return mid;
+            }
+            if(mid*mid<num){
+                left=mid+1;
+            }else{
+                right=mid-1;
+            }
+        }
+        return ans;
+    }
+
+
+
+    int NthRoot(int num , int k){
+        int left=1,right=num/k;
+        while (left<=right){
+            int mid = (left+right)/2;
+            System.out.println("mid:"+mid);
+            if(Math.pow(mid,k)==num){
+                return mid;
+            }
+            if(Math.pow(mid,k)<num){
+                left=mid+1;
+            }else{
+                right=mid-1;
+            }
+        }
+        return -1;
+    }
+
+
+    int minEatingSpeedHLPR(int[] a , int mid){
+        int summ=0;
+        for(int i=0;i<a.length;i++){
+           double ans = (double)a[i]/(double)mid;
+           summ+=Math.ceil(ans);
+        }
+        System.out.println("");
+        return summ;
+    }
+    int minEatingSpeed(int[] a , int h){
+      int left=1;
+      int right=a[0];
+      for(int i=0;i<a.length;i++){
+          if(a[i]>right){
+              right=a[i];
+          }
+      }
+      while (left<=right){
+         int mid= (left+right)/2;
+         int summ = minEatingSpeedHLPR(a,mid);
+         System.out.println("mid-->" + mid + "  sum-->" + summ);
+          if (summ <= h) {
+              right = mid - 1;  // Try for a smaller speed
+          } else {
+              left = mid + 1;   // Increase the speed
+          }
+      }
+      return left;
+    }
+
+
+
+    int smallestDivisorHLPR(int[] a , int mid){
+        int summ=0;
+        for(int i=0;i<a.length;i++){
+            double ans = (double)a[i]/(double)mid;
+            summ+=Math.ceil(ans);
+        }
+        System.out.println("");
+        return summ;
+    }
+    int smallestDivisor(int[] a , int k){
+        int left=1;
+        int right=a[0];
+        for(int i=0;i<a.length;i++){
+            if(a[i]>right){
+                right=a[i];
+            }
+        }
+
+        while (left<=right){
+            int mid = (left+right)/2;
+            int summ = smallestDivisorHLPR(a,mid);
+            if(summ<=k){
+                right=mid-1;
+            }else{
+                left=mid+1;
+            }
+        }
+
+        return left;
+    }
+
+
+
+    int shipWithinDaysHLPR(int[] a, int mid){
+        int days=0;
+        int sum=0;
+        for(int i=0;i<a.length;i++){
+            sum+=a[i];
+            if(sum==mid){
+                days++;
+                sum=0;
+                continue;
+            } else if (sum>mid) {
+                days++;
+                sum=a[i];
+            }else{
+
+            }
+
+        }
+        days++;
+
+        return days;
+    }
+
+    int shipWithinDays(int[] a , int k){
+        int left=a[0];
+        int right=0;
+        for(int i=0;i<a.length;i++){
+            right+=a[i];
+            if(a[i]>left){
+                left=a[i];
+            }
+        }
+        int ans=sum;
+        while (left<=right){
+            int mid = (left+right)/2;
+            int days = shipWithinDaysHLPR(a,mid);
+            System.out.println("mid-->"+mid+" days-->"+days);
+
+            if(days<=k){
+                ans=mid;
+                right=mid-1;
+            }else{
+                left=mid+1;
+            }
+        }
+        return ans;
+    }
     public static void main(String[] args){
 //        System.out.println("hello world");
         Leetcode L1 = new Leetcode();
 
-        
-        
+
+
 //    Arrays problame
 
 
@@ -552,10 +755,67 @@ public class Leetcode {
 //            System.out.println(res);
 
 //        35. Search Insert Position
-              int[] a = {1,3,5,6};
-              int target=2;
-              int res = L1.searchInsert(a,target);
-              System.out.println(res);
+//              int[] a = {1,3,5,6};
+//              int target=2;
+//              int res = L1.searchInsert(a,target);
+//              System.out.println(res);
+
+//        33. Search in Rotated Sorted Array
+////              int[] a = {4,5,6,7,0,1,2};
+//              int[] a = {1,0,1,1,1};
+//              int target=0;
+//              int res =  L1.searchInRotatedArray(a , target);
+//              System.out.println(res);
+
+//        153. Find Minimum in Rotated Sorted Array\
+//               int[] a = {4,5,6,7,0,1,2};
+//               int res = L1.findMinInRotatedArray(a);
+//               System.out.println(res);
+
+//        Find Kth Rotation
+//        List<Integer> a = new ArrayList<>(List.of(5, 1, 2, 3, 4));
+//        List<Integer> a = new ArrayList<>(List.of(39,6,11, 14, 18, 36, 37, 38));
+//          int res = L1.findKRotation(a);
+//          System.out.println(res);
+
+
+//        Square root of a numbe
+//           int x=2;
+//           int res = L1.floorSqrt(x);
+//           System.out.println(res);
+
+//        Find Nth root of M
+//            int num=9;
+//            int k=2;
+//            int res= L1.NthRoot(num , k);
+//            System.out.println(res);
+
+////        875. Koko Eating Bananas
+////             int[] a = {30,11,23,4,20};
+////             int[] a = {3,6,7,11};
+////             int h = 5;
+////             int h = 8;
+////             int h = 6;
+//               int[] a= {312884470};
+//               int h=312884469;
+//             int res =  L1.minEatingSpeed(a,h);
+//             System.out.println(res);
+
+
+
+//        1283. Find the Smallest Divisor Given a Threshold
+//               int[] a = {44,22,33,11,1};
+//               int k=5;
+//               int res = L1.smallestDivisor(a ,k);
+//               System.out.println(res);
+
+//        1011. Capacity To Ship Packages Within D Days
+//                int[] a = {1,2,3,4,5,6,7,8,9,10};
+                int[] a = {1,2,3,4,5,6,7,8,9,10};
+//                int k=5;
+                int k=1;
+                int res = L1.shipWithinDays(a,k);
+                System.out.println(res);
 
     }
 
