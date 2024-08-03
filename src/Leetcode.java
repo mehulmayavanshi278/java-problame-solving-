@@ -628,6 +628,123 @@ public class Leetcode {
         }
         return ans;
     }
+
+    int findKthPositive(int[] a, int k){
+        int low = 0, high = a.length - 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int missing = a[mid] - (mid + 1);
+            if (missing < k) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return k + high + 1;
+    }
+
+    String largestOddNumber(String s){
+        int index=-1;
+        String ans = "";
+        for(int i=s.length()-1;i>=0;i--){
+            int temp = Integer.parseInt(String.valueOf(s.charAt(i)));
+            System.out.println(temp);
+            if(temp%2==1){
+                index=i;
+                break;
+            }
+        }
+        System.out.println(index);
+        ans = s.substring(0,index+1);
+        return ans;
+    }
+
+    boolean rotateString(String s1, String s2){
+        if(s1.contains(s2) || s2.contains(s1)){
+            return true;
+        }
+        s1+=s1;
+        return s1.contains(s2);
+    }
+
+    boolean isAnagram(String s1 , String s2){
+       Map<Character , Integer> hashmap1 = new HashMap<>();
+       Map<Character , Integer> hashmap2 = new HashMap<>();
+       boolean ans=true;
+       if(s1.length()!=s2.length()){
+           return false;
+       }
+       for(int i=0;i<s1.length();i++){
+           hashmap1.put(s1.charAt(i) , hashmap1.getOrDefault(s1.charAt(i),0)+1);
+           hashmap2.put(s2.charAt(i) , hashmap2.getOrDefault(s2.charAt(i),0)+1);
+       }
+       System.out.println(hashmap1);
+       System.out.println(hashmap2);
+       for(Map.Entry<Character , Integer> elm : hashmap1.entrySet()){
+           Character key = elm.getKey();
+           if(hashmap2.get(key)!=elm.getValue()){
+               return false;
+           }
+       }
+       return ans;
+    }
+
+    String frequencySort(String s1){
+        String ans="";
+        PriorityQueue<Map.Entry<Character, Integer>> pq = new PriorityQueue<>(
+                (a, b) -> b.getValue() - a.getValue()
+        );
+
+        Map<Character , Integer> hashmap = new HashMap<>();
+        for(int i=0;i<s1.length();i++){
+            hashmap.put(s1.charAt(i) , hashmap.getOrDefault(s1.charAt(i) ,0)+1);
+        }
+        for(Map.Entry<Character , Integer> elm : hashmap.entrySet()){
+             pq.add(elm);
+        }
+        while (!pq.isEmpty()){
+
+            char key = pq.peek().getKey();
+            for(int i=0;i<pq.poll().getValue();i++){
+                ans+=key;
+            }
+
+        }
+        System.out.println(pq);
+        return  ans;
+    }
+
+    int beautySum(String s){
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            Map<Character, Integer> hashmap = new HashMap<>();
+            int min = Integer.MAX_VALUE;
+            int max = Integer.MIN_VALUE;
+
+            for (int j = i; j < s.length(); j++) {
+                char currentChar = s.charAt(j);
+                hashmap.put(currentChar, hashmap.getOrDefault(currentChar, 0) + 1);
+
+                int freq = hashmap.get(currentChar);
+                if (freq == 1) {
+                    min = Math.min(min, freq);
+                } else {
+                    if (freq - 1 == min) {
+                        min = Integer.MAX_VALUE;
+                        for (int val : hashmap.values()) {
+                            min = Math.min(min, val);
+                        }
+                    }
+                }
+                max = Math.max(max, freq);
+
+                if (hashmap.size() >= 2) {
+                    count += max - min;
+                }
+            }
+        }
+        return count;
+    }
     public static void main(String[] args){
 //        System.out.println("hello world");
         Leetcode L1 = new Leetcode();
@@ -810,11 +927,53 @@ public class Leetcode {
 //               System.out.println(res);
 
 //        1011. Capacity To Ship Packages Within D Days
+////                int[] a = {1,2,3,4,5,6,7,8,9,10};
 //                int[] a = {1,2,3,4,5,6,7,8,9,10};
-                int[] a = {1,2,3,4,5,6,7,8,9,10};
-//                int k=5;
-                int k=1;
-                int res = L1.shipWithinDays(a,k);
+////                int k=5;
+//                int k=1;
+//                int res = L1.shipWithinDays(a,k);
+//                System.out.println(res);
+
+
+//        1539. Kth Missing Positive Number
+//              int[] a = {2,3,4,7,11};
+////              int[] a = {1,2,3,4,5};
+////                int k=2;
+//              int k=5;
+//              int res = L1.findKthPositive(a,k);
+//              System.out.println(res);
+
+
+//        1903. Largest Odd Number in String
+////                String s = "52";
+//                String s = "4206";
+//                String res = L1.largestOddNumber(s);
+//                System.out.println(res);
+
+//        796. Rotate String
+//                String s1="abcde";
+//                String s2="cdeab";
+//                boolean res= L1.rotateString(s1,s2);
+//                System.out.println(res);
+
+//        242. Valid Anagram
+////               String s1="anagram";
+////               String s2="nagaram";
+//                 String s1="aacc";
+//                 String s2="ccac";
+//               boolean res  = L1.isAnagram(s1,s2);
+//               System.out.println(res);
+
+
+//        451. Sort Characters By Frequency
+//                String s1="teerr";
+//                String res=  L1.frequencySort(s1);
+//                System.out.println(res);
+
+
+//        1781. Sum of Beauty of All Substrings
+                String s1 = "aabcb";
+                int res = L1.beautySum(s1);
                 System.out.println(res);
 
     }
